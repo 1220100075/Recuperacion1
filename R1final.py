@@ -4,13 +4,15 @@ from datetime import date
 
 app = Flask(__name__)
 
-
+#conexion con la base de datos
 config = {
-    'user': 'root',
-    'password': 'linux123',
-    'host': 'localhost',
-    'database': 'R12'
+    'user': 'root', #usuario
+    'password': 'linux123', #Contraseña
+    'host': 'localhost', # o 127.0.0.1
+    'database': 'R12' #nombre de la base de datos.
 }
+
+#lista de usuarios
 
 @app.route('/users', methods=['GET'])
 def get_usuarios():
@@ -22,6 +24,8 @@ def get_usuarios():
     cursor.close()
     cnx.close()
     return jsonify(users)
+
+#agregar usuarios
 
 @app.route('/add-user', methods=['POST'])
 def add_user():
@@ -48,6 +52,9 @@ def add_user():
 
     except mysql.connector.Error as err:
         return jsonify({"error": "Error en la base de datos: {}".format(err)}), 500
+    
+    
+    #inicio de sesion
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -63,9 +70,11 @@ def login():
     cnx.close()
 
     if user:
-        return jsonify({"message": "Login successful", "email": user['Email']}), 200
+        return jsonify({"message": "Ingreso Correcto", "email": user['Email']}), 200
     else:
-        return jsonify({"message": "Invalid email or password"}), 401
+        return jsonify({"message": "Usuario o contraseña Incorrecto"}), 401
+    
+    #actualizar datos de usuarios
 
 @app.route('/update-user', methods=['PUT'])
 def update_user():
@@ -99,9 +108,9 @@ def update_user():
     cnx.close()
 
     if affected_rows:
-        return jsonify({"message": "User updated successfully"}), 200
+        return jsonify({"message": "El usuario se a actualizado correctamente"}), 200
     else:
-        return jsonify({"message": "User not found or no changes were made"}), 404
+        return jsonify({"message": "Usuario no encontrado o no se realizaron cambios"}), 404
 
 @app.route('/delete-user', methods=['DELETE'])
 def delete_user():
@@ -117,9 +126,9 @@ def delete_user():
     cnx.close()
 
     if affected_rows:
-        return jsonify({"message": "User deleted successfully"}), 200
+        return jsonify({"message": "El usuario se a eliminado correctamente"}), 200
     else:
-        return jsonify({"message": "User not found"}), 404
+        return jsonify({"message": "Usuario no encontrado"}), 404
 
 @app.route('/sucursales', methods=['GET'])
 def get_sucursales():
@@ -151,7 +160,7 @@ def add_sucursal():
     cnx.commit()
     cursor.close()
     cnx.close()
-    return jsonify({"message": "Sucursal added successfully"}), 201
+    return jsonify({"message": "La sucursal se a Creado correctamente"}), 201
 
 @app.route('/productos', methods=['GET'])
 def get_productos():
@@ -182,7 +191,7 @@ def add_producto():
     cnx.commit()
     cursor.close()
     cnx.close()
-    return jsonify({"message": "Producto added successfully"}), 201
+    return jsonify({"message": "PRoducto se a creado correctamente"}), 201
 
 
 if __name__ == "__main__":
